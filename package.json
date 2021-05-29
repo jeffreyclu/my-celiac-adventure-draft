@@ -3,9 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "main": "server/server.js",
-  "scripts": {
-    "test": "test"
-  },
+ 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jeffreyclu/my-celiac-adventure.git"
@@ -21,5 +19,15 @@
   "bugs": {
     "url": "https://github.com/jeffreyclu/my-celiac-adventure/issues"
   },
-  "homepage": "https://github.com/jeffreyclu/my-celiac-adventure#readme"
+  "homepage": "https://github.com/jeffreyclu/my-celiac-adventure#readme",
+  "dependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "scripts": {
+    "dev:server": "NODE_ENV=development nodemon server/server.js",
+    "dev:client": "cd client && npm run start",
+    "prod:server": "NODE_ENV=production node server/server.js",
+    "build:client": "cd client && npm run build",
+    "start": "npm run build:client && npm run prod:server"
+  }
 }
