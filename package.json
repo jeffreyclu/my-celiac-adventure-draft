@@ -1,0 +1,25 @@
+{
+  "name": "my-celiac-adventure",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffreyclu/my-celiac-adventure.git"
+  },
+  "keywords": [
+    "my",
+    "celiac",
+    "adventure",
+    "game"
+  ],
+  "author": "Jeffrey Lu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeffreyclu/my-celiac-adventure/issues"
+  },
+  "homepage": "https://github.com/jeffreyclu/my-celiac-adventure#readme"
+}
