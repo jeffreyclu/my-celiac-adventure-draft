@@ -25,8 +25,9 @@
   "scripts": {
     "dev:server": "NODE_ENV=development nodemon server/server.js",
     "dev:client": "cd client && npm run start",
+    "build:server": "cd server & npm i && npm run prod:server",
     "prod:server": "NODE_ENV=production node server/server.js",
-    "build:client": "cd client && npm run build",
+    "build:client": "cd client && npm i && npm run build",
     "start": "npm i && npm run build:client && npm run prod:server"
   }
 }
