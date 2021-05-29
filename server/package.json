@@ -17,6 +17,11 @@
   },
   "homepage": "https://github.com/jeffreyclu/my-celiac-adventure#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "colors": "^1.4.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7",
+    "pg": "^8.6.0",
+    "sequelize": "^6.6.2"
   }
 }
