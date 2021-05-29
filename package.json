@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "",
   "main": "server/server.js",
- 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jeffreyclu/my-celiac-adventure.git"
@@ -28,6 +27,6 @@
     "dev:client": "cd client && npm run start",
     "prod:server": "NODE_ENV=production node server/server.js",
     "build:client": "cd client && npm run build",
-    "start": "npm run prod:server"
+    "start": "npm i && npm run build:client && npm run prod:server"
   }
 }
