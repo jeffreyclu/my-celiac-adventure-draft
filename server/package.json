@@ -1,0 +1,22 @@
+{
+  "name": "my-celiac-adventure-server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffreyclu/my-celiac-adventure.git"
+  },
+  "author": "Jeffrey Lu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeffreyclu/my-celiac-adventure/issues"
+  },
+  "homepage": "https://github.com/jeffreyclu/my-celiac-adventure#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
