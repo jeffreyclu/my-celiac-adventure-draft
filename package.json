@@ -28,6 +28,6 @@
     "dev:client": "cd client && npm run start",
     "prod:server": "NODE_ENV=production node server/server.js",
     "build:client": "cd client && npm run build",
-    "start": "npm run build:client && npm run prod:server"
+    "start": "npm run prod:server"
   }
 }
