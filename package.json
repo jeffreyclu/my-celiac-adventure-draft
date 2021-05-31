@@ -41,15 +41,15 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
+    },
+    "lint-staged": {
+      "*.js": [
+        "eslint --fix"
+      ],
+      "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+        "prettier --write"
+      ]
     }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix"
-    ],
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "prettier --write"
-    ]
   },
   "scripts": {
     "dev:server": "NODE_ENV=development nodemon server/server.js",
