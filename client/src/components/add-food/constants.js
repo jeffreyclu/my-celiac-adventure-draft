@@ -1,0 +1,33 @@
+export const foodLabels = {
+  name: 'Name',
+  gluten: 'Gluten',
+  glutenExplanation: 'Gluten Explanation',
+  fructose: 'Fructose',
+  fructoseExplanation: 'Fructose Explanation',
+  lactose: 'Lactose',
+  lactoseExplanation: 'Lactose Explanation',
+  price: 'Price',
+  baseHunger: 'Base Hunger',
+  baseHealth: 'Base Health',
+  breakfast: 'Breakfast',
+  lunch: 'Lunch',
+  dinner: 'Dinner',
+  tags: 'Tags',
+};
+
+export const baseFormData = {
+  name: '',
+  gluten: 1,
+  glutenExplanation: '',
+  fructose: false,
+  fructoseExplanation: '',
+  lactose: false,
+  lactoseExplanation: '',
+  price: 1,
+  baseHunger: 1,
+  baseHealth: 1,
+  breakfast: false,
+  lunch: false,
+  dinner: false,
+  tags: [],
+};
