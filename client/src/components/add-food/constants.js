@@ -1,6 +1,5 @@
-const foodLabels = {
+export const foodLabels = {
   name: 'Name',
-  description: 'Description',
   gluten: 'Gluten',
   glutenExplanation: 'Gluten Explanation',
   fructose: 'Fructose',
@@ -10,6 +9,25 @@ const foodLabels = {
   price: 'Price',
   baseHunger: 'Base Hunger',
   baseHealth: 'Base Health',
+  breakfast: 'Breakfast',
+  lunch: 'Lunch',
+  dinner: 'Dinner',
+  tags: 'Tags',
 };
 
-export { foodLabels };
+export const baseFormData = {
+  name: '',
+  gluten: 1,
+  glutenExplanation: '',
+  fructose: false,
+  fructoseExplanation: '',
+  lactose: false,
+  lactoseExplanation: '',
+  price: 1,
+  baseHunger: 1,
+  baseHealth: 1,
+  breakfast: false,
+  lunch: false,
+  dinner: false,
+  tags: [],
+};
