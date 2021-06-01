@@ -24,7 +24,8 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.12.12",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "react-hooks-global-state": "^1.0.1"
   },
   "devDependencies": {
     "concurrently": "^5.2.0",
