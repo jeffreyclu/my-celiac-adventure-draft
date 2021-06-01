@@ -1,2 +1,5 @@
 .foodError {
+  color: white;
+  background-color: red;
+  width: 100%;
 }

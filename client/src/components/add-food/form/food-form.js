@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import FoodSubmit from './food-submit';
 import FoodCancel from './food-cancel';
 import FoodInput from './food-input';
-import { foodLabels } from '../constants';
+import { foodLabels, baseFormData } from '../constants';
 import { useGlobalState } from '../../../state';
 
 import styles from './food-form.module.css';
@@ -12,29 +12,22 @@ export default function FoodForm() {
   const [, setFetched] = useGlobalState('fetched');
   const [, setFormDisabled] = useGlobalState('formDisabled');
   const [, setShowForm] = useGlobalState('showForm');
+  const [, setFood] = useGlobalState('food');
   const [, setError] = useGlobalState('error');
   const [, setSuccess] = useGlobalState('success');
-  const [formData, setFormData] = useState({});
+  const [food] = useGlobalState('food');
+  const [formEditable] = useGlobalState('formEditable');
+  const [formData, setFormData] = useGlobalState('formData');
 
-  useEffect(() => {
-    resetFormData();
+  const resetFormData = useCallback(() => {
+    setFormData(baseFormData);
   }, [setFormData]);
 
-  const resetFormData = () => {
-    setFormData({
-      name: '',
-      description: '',
-      gluten: false,
-      glutenExplanation: '',
-      fructose: false,
-      fructoseExplanation: '',
-      lactose: false,
-      lactoseExplanation: '',
-      price: 1,
-      baseHunger: 1,
-      baseHealth: 1,
-    });
-  };
+  useEffect(() => {
+    if (!formEditable) {
+      resetFormData();
+    }
+  }, [resetFormData, formEditable]);
 
   useEffect(() => {
     validateForm();
@@ -56,22 +49,37 @@ export default function FoodForm() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setFormDisabled(true);
-    const req = await fetch('/api/food/one', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
+    let req;
+    if (!formEditable) {
+      req = await fetch('/api/food/one', {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+    } else {
+      req = await fetch(`/api/food/one/${food}`, {
+        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+    }
     const resp = await req.json();
     if (resp.success) {
       resetFormData();
       setFetched(false);
       setShowForm(false);
-      return setSuccess(`Success: ${resp.data.name} was created.`);
+      setFood('');
+      return setSuccess(`Success: ${resp.data.name} was edited.`);
     } else {
       setFormDisabled(false);
       return setError(`Error: ${resp.error}. Please try again later.`);
@@ -92,43 +100,46 @@ export default function FoodForm() {
     });
   };
 
-  const foodInputs = Object.entries(formData).map(([key, value]) => {
-    // render inputs based on formData data structure
-    let type = 'text';
-    // assign different input type based on input value type
-    if (typeof value === 'boolean') {
-      type = 'checkbox';
-    } else if (typeof value === 'number') {
-      type = 'number';
-    }
-    // hide explanation inputs if not applicable
-    if (key === 'glutenExplanation' && !formData['gluten']) {
-      return null;
-    }
-    if (key === 'fructoseExplanation' && !formData['fructose']) {
-      return null;
-    }
-    if (key === 'lactoseExplanation' && !formData['lactose']) {
-      return null;
-    }
-    return (
-      <FoodInput
-        key={key}
-        name={key}
-        label={foodLabels[key]}
-        type={type}
-        value={formData[key]}
-        handleInputChange={handleInputChange}
-      />
-    );
-  });
+  const foodInputs = Object.entries(formData)
+    // filter out mongoDB _ keys
+    ?.filter(([key]) => !/_/.test(key))
+    ?.map(([key, value]) => {
+      // render inputs based on formData data structure
+      let type = 'text';
+      // assign different input type based on input value type
+      if (typeof value === 'boolean') {
+        type = 'checkbox';
+      } else if (typeof value === 'number') {
+        type = 'number';
+      }
+      // hide explanation inputs if not applicable
+      if (key === 'glutenExplanation' && !formData['gluten']) {
+        return null;
+      }
+      if (key === 'fructoseExplanation' && !formData['fructose']) {
+        return null;
+      }
+      if (key === 'lactoseExplanation' && !formData['lactose']) {
+        return null;
+      }
+      return (
+        <FoodInput
+          key={key}
+          name={key}
+          label={foodLabels[key]}
+          type={type}
+          value={formData[key]}
+          handleInputChange={handleInputChange}
+        />
+      );
+    });
 
   return (
     <>
       <div className={styles.foodFormModalOverlay} />
       <article className={styles.foodFormModal}>
         <div className={styles.foodFormContainer}>
-          <h2>Add a dish</h2>
+          <h2>{formEditable ? 'Edit a dish' : 'Add a dish'}</h2>
           <form className={styles.foodForm} onSubmit={handleFormSubmit}>
             {foodInputs}
             <section className={styles.foodButtons}>

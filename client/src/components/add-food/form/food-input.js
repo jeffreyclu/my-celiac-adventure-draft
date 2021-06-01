@@ -24,6 +24,7 @@ export default function FoodInput({
           name={name}
           type={type}
           value={value}
+          checked={value}
           onChange={handleInputChange}
           placeholder={`${label} cannot be ${
             type === 'number' ? 'zero' : 'blank'

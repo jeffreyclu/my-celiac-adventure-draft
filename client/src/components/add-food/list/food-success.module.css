@@ -1,3 +1,5 @@
 .foodSuccess {
-  color: green;
+  color: white;
+  background-color: green;
+  width: 100%;
 }
