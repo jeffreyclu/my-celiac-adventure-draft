@@ -1,0 +1,25 @@
+.foodList {
+  width: 95%;
+}
+
+.foodListItems {
+  display: flex;
+  flex-flow: column;
+}
+
+.foodListItem {
+  display: flex;
+  flex-flow: row;
+}
+
+.foodListFields:first-of-type {
+  flex: 1 0 15vw;
+}
+
+.foodListFields:nth-of-type(2) {
+  flex: 1 0 15vw;
+}
+
+.foodListFields {
+  flex: 1 0 10vw;
+}
