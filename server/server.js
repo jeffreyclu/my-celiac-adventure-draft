@@ -16,18 +16,18 @@ app.use('/api/food', foodRouter);
 // Serve index.html
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
-  app.get('/*', function(req, res) {
+  app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
   });
 } else {
   app.use(express.static(path.join(__dirname, '../client/public')));
-  app.get('/', function(req, res) {
+  app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '../client/public/index.html'));
   });
 }
 
 // Global error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   if (process.env.NODE_ENV === 'development') {
     console.log(`Error stack -> ${JSON.stringify(err, null, 2)}`.red);
   }
@@ -39,5 +39,7 @@ app.use((err, req, res, next) => {
 
 // Run the server
 app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} on port ${PORT}`.yellow.bold);
+  console.log(
+    `Server running in ${process.env.NODE_ENV} on port ${PORT}`.yellow.bold,
+  );
 });
