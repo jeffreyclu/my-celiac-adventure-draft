@@ -1,15 +1,20 @@
 .foodList {
-  width: 95%;
+  width: 100%;
+  max-height: 50%;
+  margin-bottom: 1rem;
 }
 
 .foodListItems {
   display: flex;
   flex-flow: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .foodListItem {
   display: flex;
   flex-flow: row;
+  overflow-x: hidden;
 }
 
 .foodListFields:first-of-type {
@@ -22,4 +27,8 @@
 
 .foodListFields {
   flex: 1 0 10vw;
+}
+
+.headers {
+  font-weight: bold;
 }

@@ -1,8 +1,39 @@
+.foodFormModal {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.foodFormModalOverlay {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  opacity: 75%;
+  box-sizing: border-box;
+}
+
+.foodFormContainer {
+  background-color: white;
+  border: 1px solid black;
+  width: 50vw;
+  padding: 5rem;
+  box-sizing: border-box;
+}
+
 .foodForm {
   display: flex;
   flex-flow: column;
   align-items: flex-start;
   justify-content: flex-start;
-  margin-top: 3rem;
-  min-width: 20rem;
+}
+
+.foodButtons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }

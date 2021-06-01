@@ -1,26 +1,40 @@
 import React, { useEffect, useState } from 'react';
+
 import FoodSubmit from './food-submit';
+import FoodCancel from './food-cancel';
 import FoodInput from './food-input';
 import { foodLabels } from '../constants';
+import { useGlobalState } from '../../../state';
 
 import styles from './food-form.module.css';
 
 export default function FoodForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    gluten: false,
-    glutenExplanation: '',
-    fructose: false,
-    fructoseExplanation: '',
-    lactose: false,
-    lactoseExplanation: '',
-    price: 1,
-    baseHunger: 1,
-    baseHealth: 1,
-  });
+  const [, setFetched] = useGlobalState('fetched');
+  const [, setFormDisabled] = useGlobalState('formDisabled');
+  const [, setShowForm] = useGlobalState('showForm');
+  const [, setError] = useGlobalState('error');
+  const [, setSuccess] = useGlobalState('success');
+  const [formData, setFormData] = useState({});
 
-  const [formDisabled, setFormDisabled] = useState(false);
+  useEffect(() => {
+    resetFormData();
+  }, [setFormData]);
+
+  const resetFormData = () => {
+    setFormData({
+      name: '',
+      description: '',
+      gluten: false,
+      glutenExplanation: '',
+      fructose: false,
+      fructoseExplanation: '',
+      lactose: false,
+      lactoseExplanation: '',
+      price: 1,
+      baseHunger: 1,
+      baseHealth: 1,
+    });
+  };
 
   useEffect(() => {
     validateForm();
@@ -41,7 +55,7 @@ export default function FoodForm() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formData);
+    setFormDisabled(true);
     const req = await fetch('/api/food/one', {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
@@ -53,7 +67,15 @@ export default function FoodForm() {
       body: JSON.stringify(formData),
     });
     const resp = await req.json();
-    console.log(resp);
+    if (resp.success) {
+      resetFormData();
+      setFetched(false);
+      setShowForm(false);
+      return setSuccess(`Success: ${resp.data.name} was created.`);
+    } else {
+      setFormDisabled(false);
+      return setError(`Error: ${resp.error}. Please try again later.`);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -103,10 +125,19 @@ export default function FoodForm() {
 
   return (
     <>
-      <form className={styles.foodForm} onSubmit={handleFormSubmit}>
-        {foodInputs}
-        <FoodSubmit formDisabled={formDisabled} />
-      </form>
+      <div className={styles.foodFormModalOverlay} />
+      <article className={styles.foodFormModal}>
+        <div className={styles.foodFormContainer}>
+          <h2>Add a dish</h2>
+          <form className={styles.foodForm} onSubmit={handleFormSubmit}>
+            {foodInputs}
+            <section className={styles.foodButtons}>
+              <FoodSubmit />
+              <FoodCancel />
+            </section>
+          </form>
+        </div>
+      </article>
     </>
   );
 }

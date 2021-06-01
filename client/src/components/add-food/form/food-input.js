@@ -11,7 +11,8 @@ export default function FoodInput({
 }) {
   return (
     <>
-      <label className={styles.foodRow}>
+      <label
+        className={`${styles.foodRow} ${type === 'checkbox' && styles.short}`}>
         <span
           className={`${styles.foodLabel} ${
             (type === 'text' || type === 'number') && styles.above

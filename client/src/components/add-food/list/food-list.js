@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
 
 import FoodError from './food-error';
+import FoodSuccess from './food-success';
 import FoodListHeaders from './food-list-headers';
 import FoodListItems from './food-list-items';
+import FoodLoading from './food-loading';
+import { useGlobalState } from '../../../state';
 
 import styles from './food-list.module.css';
 
 export default function FoodList() {
-  const [foods, setFoods] = useState([]);
-  const [fetched, setFetched] = useState(false);
-  const [error, setError] = useState(false);
+  const [, setFoods] = useGlobalState('foods');
+  const [fetched, setFetched] = useGlobalState('fetched');
+  const [error, setError] = useGlobalState('error');
+  const [success] = useGlobalState('success');
+
   const fetchFoods = async () => {
     const req = await fetch('/api/food/all');
     if (!req.ok) {
@@ -28,18 +33,20 @@ export default function FoodList() {
       setFetched(false);
     }
   };
+
   useEffect(() => {
     if (!fetched) {
-      setTimeout(fetchFoods, 1000);
+      fetchFoods();
     }
-  }, [fetched]);
+  });
 
   return (
     <article className={styles.foodList}>
       <h2>Submitted Dishes</h2>
-      {error && <FoodError error={error} />}
+      {error && <FoodError />}
       <FoodListHeaders />
-      <FoodListItems foods={foods} />
+      {fetched ? <FoodListItems /> : <FoodLoading />}
+      {success && <FoodSuccess />}
     </article>
   );
 }

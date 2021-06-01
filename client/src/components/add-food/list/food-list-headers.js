@@ -8,7 +8,9 @@ export default function FoodListHeaders() {
   const foodListHeaders = Object.values(foodLabels)
     ?.filter((label) => !/Explanation/.test(label))
     ?.map((header, i) => (
-      <span className={styles.foodListFields} key={`Header_${i}`}>
+      <span
+        className={`${styles.foodListFields} ${styles.headers}`}
+        key={`Header_${i}`}>
         {header}
       </span>
     ));

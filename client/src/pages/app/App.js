@@ -11,12 +11,8 @@ export default function App() {
     <div className={styles.app}>
       <Router>
         <Switch>
-          <Route path="/add-food">
-            <AddFood />
-          </Route>
-          <Route path="/">
-            <Game />
-          </Route>
+          <Route path="/add-food" component={AddFood} />
+          <Route path="/" component={Game} />
         </Switch>
       </Router>
     </div>
