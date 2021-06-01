@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import FoodSubmit from './food-submit';
 import FoodInput from './food-input';
-import { foodLabels } from './constants';
+import { foodLabels } from '../constants';
 
 import styles from './food-form.module.css';
 

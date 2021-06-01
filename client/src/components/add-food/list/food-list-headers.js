@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { foodLabels } from './constants';
+import { foodLabels } from '../constants';
 
 import styles from './food-list.module.css';
 

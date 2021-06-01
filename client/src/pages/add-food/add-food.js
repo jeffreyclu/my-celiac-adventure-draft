@@ -1,6 +1,6 @@
 import React from 'react';
-import FoodForm from '../../components/add-food/food-form';
-import FoodList from '../../components/add-food/food-list';
+import FoodForm from '../../components/add-food/form/food-form';
+import FoodList from '../../components/add-food/list/food-list';
 
 import styles from './add-food.module.css';
 
