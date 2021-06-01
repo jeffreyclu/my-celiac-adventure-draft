@@ -1,0 +1,33 @@
+.foodRow {
+  position: relative;
+  display: inline-block;
+  height: 3.5rem;
+  width: 100%;
+}
+
+.foodLabel {
+  font-size: 1rem;
+}
+
+.above {
+  position: absolute;
+  top: -1rem;
+  left: 0;
+}
+
+.foodInput {
+  font-size: 1.25rem;
+}
+
+.foodInput[type='text'] {
+  width: 100%;
+}
+
+.foodInput[type='number'] {
+  width: 100%;
+}
+
+.foodInput[type='checkbox'] {
+  height: 1.25rem;
+  width: 1.25rem;
+}

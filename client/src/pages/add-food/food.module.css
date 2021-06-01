@@ -1,0 +1,11 @@
+.food {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.heading {
+  margin: 0;
+  padding: 0;
+}

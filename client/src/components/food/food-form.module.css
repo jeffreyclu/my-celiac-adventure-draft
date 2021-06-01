@@ -1,0 +1,8 @@
+.foodForm {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 3rem;
+  min-width: 20rem;
+}
