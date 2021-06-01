@@ -1,8 +1,8 @@
 import React from 'react';
-import FoodForm from '../../components/food/food-form';
-import FoodList from '../../components/food/food-list';
+import FoodForm from '../../components/add-food/food-form';
+import FoodList from '../../components/add-food/food-list';
 
-import styles from './food.module.css';
+import styles from './add-food.module.css';
 
 export default function AddFood() {
   return (
