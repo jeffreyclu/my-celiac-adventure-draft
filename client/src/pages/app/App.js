@@ -1,26 +1,24 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  // Link
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import Food from '../food/Food';
-// import * as styles from './App.css';
+import AddFood from '../add-food/add-food';
+import Game from '../game/game';
 
-function App() {
+import styles from './app.module.css';
+
+export default function App() {
   return (
-    <div className='app'>
+    <div className={styles.app}>
       <Router>
         <Switch>
-          <Route path='/food'>
-            <Food />
+          <Route path="/add-food">
+            <AddFood />
+          </Route>
+          <Route path="/">
+            <Game />
           </Route>
         </Switch>
       </Router>
     </div>
   );
 }
-
-export default App;
