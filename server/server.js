@@ -3,6 +3,9 @@ const path = require('path');
 require('colors');
 require('dotenv').config();
 
+// db
+require('./db/index');
+
 // Setup
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,6 +15,8 @@ app.use(express.json({ extended: false }));
 // Routes
 const foodRouter = require('./routes/food');
 app.use('/api/food', foodRouter);
+const tagRouter = require('./routes/tag');
+app.use('/api/tag', tagRouter);
 
 // Serve index.html
 if (process.env.NODE_ENV === 'production') {
