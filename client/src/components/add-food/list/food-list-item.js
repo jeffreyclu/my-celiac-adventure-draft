@@ -28,7 +28,11 @@ export default function FoodListItem({ food, index }) {
         formatted = value.slice(0, 29) + `...`;
       }
       return (
-        <span key={`Value_${i}`} className={styles.foodListFields}>
+        <span
+          key={`Value_${i}`}
+          className={`${styles.foodListFields} ${
+            value === true && styles.green
+          }`}>
           {typeof value === 'string' ? formatted : JSON.stringify(value)}
         </span>
       );
