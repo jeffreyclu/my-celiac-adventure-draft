@@ -6,6 +6,7 @@ import styles from './food-list.module.css';
 
 export default function FoodListHeaders() {
   const foodListHeaders = Object.values(foodLabels)
+    // filter out the explanation fields, no need to show them
     ?.filter((label) => !/Explanation/.test(label))
     ?.map((header, i) => (
       <span

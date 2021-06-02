@@ -1,0 +1,9 @@
+.foodTag {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.used {
+  color: lightgrey;
+  text-decoration: strikethrough;
+}

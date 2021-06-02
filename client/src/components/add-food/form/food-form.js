@@ -3,6 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 import FoodSubmit from './food-submit';
 import FoodCancel from './food-cancel';
 import FoodInput from './food-input';
+import FoodTags from './food-tags';
 import { foodLabels, baseFormData } from '../constants';
 import { useGlobalState } from '../../../state';
 
@@ -23,15 +24,12 @@ export default function FoodForm() {
     setFormData(baseFormData);
   }, [setFormData]);
 
+  // generate a blank form if not editing an existing food
   useEffect(() => {
     if (!formEditable) {
       resetFormData();
     }
   }, [resetFormData, formEditable]);
-
-  useEffect(() => {
-    validateForm();
-  });
 
   const validateForm = () => {
     // filter out unused inputs
@@ -46,11 +44,17 @@ export default function FoodForm() {
     return setFormDisabled(false);
   };
 
+  // validate form on every change
+  useEffect(() => {
+    validateForm();
+  });
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setFormDisabled(true);
     let req;
     if (!formEditable) {
+      // if not editing existing data, send new POST request
       req = await fetch('/api/food/one', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, *cors, same-origin
@@ -62,6 +66,7 @@ export default function FoodForm() {
         body: JSON.stringify(formData),
       });
     } else {
+      // otherwise, send PUT request
       req = await fetch(`/api/food/one/${food}`, {
         method: 'PUT', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, *cors, same-origin
@@ -73,7 +78,9 @@ export default function FoodForm() {
         body: JSON.stringify(formData),
       });
     }
+
     const resp = await req.json();
+
     if (resp.success) {
       resetFormData();
       setFetched(false);
@@ -104,7 +111,7 @@ export default function FoodForm() {
     // filter out mongoDB _ keys
     ?.filter(([key]) => !/_/.test(key))
     ?.map(([key, value]) => {
-      // render inputs based on formData data structure
+      // render inputs dynamically based on form data structure
       let type = 'text';
       // assign different input type based on input value type
       if (typeof value === 'boolean') {
@@ -130,6 +137,7 @@ export default function FoodForm() {
           type={type}
           value={formData[key]}
           handleInputChange={handleInputChange}
+          disabled={key === 'tags'}
         />
       );
     });
@@ -142,6 +150,7 @@ export default function FoodForm() {
           <h2>{formEditable ? 'Edit a dish' : 'Add a dish'}</h2>
           <form className={styles.foodForm} onSubmit={handleFormSubmit}>
             {foodInputs}
+            <FoodTags />
             <section className={styles.foodButtons}>
               <FoodSubmit />
               <FoodCancel />
