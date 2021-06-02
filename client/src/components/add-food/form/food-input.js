@@ -8,6 +8,7 @@ export default function FoodInput({
   type,
   value,
   handleInputChange,
+  disabled,
 }) {
   return (
     <>
@@ -29,6 +30,7 @@ export default function FoodInput({
           placeholder={`${label} cannot be ${
             type === 'number' ? 'zero' : 'blank'
           }`}
+          disabled={disabled}
         />
       </label>
     </>
