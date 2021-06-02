@@ -8,7 +8,7 @@ foodController.getFoods = async (req, res, next) => {
     const foods = await Food.find();
     res.locals.result = {
       success: true,
-      data: foods 
+      data: foods,
     };
     console.log(`Retrieved foods: ${JSON.stringify(foods)}`.green);
     next();
@@ -23,11 +23,11 @@ foodController.getFood = async (req, res, next) => {
     const { id } = req.params;
     const food = await Food.findById(id);
     if (!food) {
-      throw new Error(`food id ${id} does not exist.`)
+      throw new Error(`food id ${id} does not exist.`);
     }
     res.locals.result = {
       success: true,
-      data: food
+      data: food,
     };
     console.log(`Retrieved food: ${JSON.stringify(food)}`.green);
     next();
@@ -42,7 +42,7 @@ foodController.postFood = async (req, res, next) => {
     const food = await Food.create(req.body);
     res.locals.result = {
       success: true,
-      data: food
+      data: food,
     };
     console.log(`Created food: ${JSON.stringify(food)}`.green);
     next();
@@ -57,11 +57,11 @@ foodController.putFood = async (req, res, next) => {
     const { id } = req.params;
     const food = await Food.findByIdAndUpdate(id, req.body);
     if (!food) {
-      throw new Error(`food id ${id} does not exist.`)
+      throw new Error(`food id ${id} does not exist.`);
     }
     res.locals.result = {
       success: true,
-      data: food
+      data: food,
     };
     console.log(`Updated food: ${JSON.stringify(food)}`.green);
     next();
@@ -76,11 +76,11 @@ foodController.deleteFood = async (req, res, next) => {
     const { id } = req.params;
     const food = await Food.findByIdAndDelete(id);
     if (!food) {
-      throw new Error(`food id ${id} does not exist.`)
+      throw new Error(`food id ${id} does not exist.`);
     }
     res.locals.result = {
       success: true,
-      data: food
+      data: food,
     };
     console.log(`Deleted food: ${JSON.stringify(food)}`.green);
     next();
