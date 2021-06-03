@@ -6,5 +6,5 @@ mongoose
     useUnifiedTopology: true,
     dbName: 'my-celiac-adventure',
   })
-  .then(() => console.log('Connected to Mongo DB.'))
-  .catch((err) => console.log(err));
+  .then(() => console.log(`Connected to Mongo DB.`.green))
+  .catch((err) => console.log(`${err}`.red));
