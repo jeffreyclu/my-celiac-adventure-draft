@@ -1,5 +1,7 @@
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
+
 require('colors');
 require('dotenv').config();
 
@@ -10,12 +12,18 @@ require('./db/index');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// middleware
 app.use(express.json({ extended: false }));
+app.use(cookieParser());
 
 // Authentication
 const isAuthorized = require('./auth/auth');
 app.get('/api/auth', isAuthorized, (req, res) => {
-  res.status(200).json({ success: true, user_id: res.locals.user_id });
+  res.status(200).json(res.locals.result);
+});
+const isAdminAuthorized = require('./auth/auth-admin');
+app.get('/api/auth-admin', isAuthorized, isAdminAuthorized, (req, res) => {
+  res.status(200).json(res.locals.result);
 });
 const login = require('./auth/login');
 app.post('/api/login', login, (req, res) => {

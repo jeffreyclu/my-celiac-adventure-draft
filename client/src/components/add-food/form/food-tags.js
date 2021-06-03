@@ -8,7 +8,7 @@ import styles from './food-tags.module.css';
 export default function FoodTags() {
   const [fetchedTags, setFetchedTags] = useState(false);
   const [formTags, setFormTags] = useState([]);
-  const [setError] = useGlobalState('error');
+  const [setAddFoodFormError] = useGlobalState('addFoodFormError');
 
   const fetchTags = async () => {
     // check cache
@@ -22,7 +22,7 @@ export default function FoodTags() {
     const req = await fetch('/api/tag/all');
     if (!req.ok) {
       const { status, statusText } = req;
-      return setError(
+      return setAddFoodFormError(
         `${status} error: ${statusText}. Please try again later.`,
       );
     }
@@ -35,7 +35,7 @@ export default function FoodTags() {
       setFormTags(data);
       setFetchedTags(true);
     } else {
-      setError(`Error: ${data}. Please try again later.`);
+      setAddFoodFormError(`Error: ${data}. Please try again later.`);
       setFetchedTags(false);
     }
   };

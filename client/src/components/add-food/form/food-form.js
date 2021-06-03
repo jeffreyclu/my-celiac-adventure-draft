@@ -10,26 +10,28 @@ import { useGlobalState } from '../../../state';
 import styles from './food-form.module.css';
 
 export default function FoodForm() {
-  const [, setFetched] = useGlobalState('fetched');
-  const [, setFormDisabled] = useGlobalState('formDisabled');
-  const [, setShowForm] = useGlobalState('showForm');
-  const [, setFood] = useGlobalState('food');
-  const [, setError] = useGlobalState('error');
-  const [, setSuccess] = useGlobalState('success');
-  const [food] = useGlobalState('food');
-  const [formEditable] = useGlobalState('formEditable');
-  const [formData, setFormData] = useGlobalState('formData');
+  const [, setAddFoodFormFetched] = useGlobalState('addFoodFormFetched');
+  const [, setAddFoodFormDisabled] = useGlobalState('addFoodFormDisabled');
+  const [, setShowAddFoodForm] = useGlobalState('showAddFoodForm');
+  const [, setAddFoodFormError] = useGlobalState('addFoodFormError');
+  const [, setAddFoodFormSuccess] = useGlobalState('addFoodFormSuccess');
+  const [addFoodFormEditable] = useGlobalState('addFoodFormEditable');
+  const [addFoodFormData, setAddFoodFormData] =
+    useGlobalState('addFoodFormData');
+  const [addFoodFormSelectedFood, setAddFoodFormSelectedFood] = useGlobalState(
+    'addFoodFormSelectedFood',
+  );
 
   const resetFormData = useCallback(() => {
-    setFormData(baseFormData);
-  }, [setFormData]);
+    setAddFoodFormData(baseFormData);
+  }, [setAddFoodFormData]);
 
   // generate a blank form if not editing an existing food
   useEffect(() => {
-    if (!formEditable) {
+    if (!addFoodFormEditable) {
       resetFormData();
     }
-  }, [resetFormData, formEditable]);
+  }, [resetFormData, addFoodFormEditable]);
 
   const validateForm = () => {
     // filter out unused inputs
@@ -38,10 +40,10 @@ export default function FoodForm() {
       const { type, value } = activeInputs[i].props;
       // ignore checkboxes and check for blanks
       if (type !== 'checkbox' && !value) {
-        return setFormDisabled(true);
+        return setAddFoodFormDisabled(true);
       }
     }
-    return setFormDisabled(false);
+    return setAddFoodFormDisabled(false);
   };
 
   // validate form on every change
@@ -51,9 +53,9 @@ export default function FoodForm() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setFormDisabled(true);
+    setAddFoodFormDisabled(true);
     let req;
-    if (!formEditable) {
+    if (!addFoodFormEditable) {
       // if not editing existing data, send new POST request
       req = await fetch('/api/food/one', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -63,11 +65,11 @@ export default function FoodForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(addFoodFormData),
       });
     } else {
       // otherwise, send PUT request
-      req = await fetch(`/api/food/one/${food}`, {
+      req = await fetch(`/api/food/one/${addFoodFormSelectedFood}`, {
         method: 'PUT', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -75,21 +77,30 @@ export default function FoodForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(addFoodFormData),
       });
+    }
+
+    if (!req.ok) {
+      const { status, statusText } = req;
+      return setAddFoodFormError(
+        `${status} error: ${statusText}. Please try again later.`,
+      );
     }
 
     const resp = await req.json();
 
     if (resp.success) {
       resetFormData();
-      setFetched(false);
-      setShowForm(false);
-      setFood('');
-      return setSuccess(`Success: ${resp.data.name} was edited.`);
+      setAddFoodFormFetched(false);
+      setShowAddFoodForm(false);
+      setAddFoodFormSelectedFood('');
+      return setAddFoodFormSuccess(`Success: ${resp.data.name} was edited.`);
     } else {
-      setFormDisabled(false);
-      return setError(`Error: ${resp.error}. Please try again later.`);
+      setAddFoodFormDisabled(false);
+      return setAddFoodFormError(
+        `Error: ${resp.error}. Please try again later.`,
+      );
     }
   };
 
@@ -101,13 +112,13 @@ export default function FoodForm() {
     } else if (e.target.type === 'number') {
       value = parseInt(e.target.value);
     }
-    setFormData({
-      ...formData,
+    setAddFoodFormData({
+      ...addFoodFormData,
       [e.target.name]: value,
     });
   };
 
-  const foodInputs = Object.entries(formData)
+  const foodInputs = Object.entries(addFoodFormData)
     // filter out mongoDB _ keys
     ?.filter(([key]) => !/_/.test(key))
     ?.map(([key, value]) => {
@@ -120,13 +131,13 @@ export default function FoodForm() {
         type = 'number';
       }
       // hide explanation inputs if not applicable
-      if (key === 'glutenExplanation' && !formData['gluten']) {
+      if (key === 'glutenExplanation' && !addFoodFormData['gluten']) {
         return null;
       }
-      if (key === 'fructoseExplanation' && !formData['fructose']) {
+      if (key === 'fructoseExplanation' && !addFoodFormData['fructose']) {
         return null;
       }
-      if (key === 'lactoseExplanation' && !formData['lactose']) {
+      if (key === 'lactoseExplanation' && !addFoodFormData['lactose']) {
         return null;
       }
       return (
@@ -135,7 +146,7 @@ export default function FoodForm() {
           name={key}
           label={foodLabels[key]}
           type={type}
-          value={formData[key]}
+          value={addFoodFormData[key]}
           handleInputChange={handleInputChange}
           disabled={key === 'tags'}
         />
@@ -147,7 +158,7 @@ export default function FoodForm() {
       <div className={styles.foodFormModalOverlay} />
       <article className={styles.foodFormModal}>
         <div className={styles.foodFormContainer}>
-          <h2>{formEditable ? 'Edit a dish' : 'Add a dish'}</h2>
+          <h2>{addFoodFormEditable ? 'Edit a dish' : 'Add a dish'}</h2>
           <form className={styles.foodForm} onSubmit={handleFormSubmit}>
             {foodInputs}
             <FoodTags />

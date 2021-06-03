@@ -10,42 +10,45 @@ import { useGlobalState } from '../../../state';
 import styles from './food-list.module.css';
 
 export default function FoodList() {
-  const [, setFoods] = useGlobalState('foods');
-  const [fetched, setFetched] = useGlobalState('fetched');
-  const [error, setError] = useGlobalState('error');
-  const [success, setSuccess] = useGlobalState('success');
+  const [, setAddFoodFormFoods] = useGlobalState('addFoodFormFoods');
+  const [addFoodFormFetched, setAddFoodFormFetched] =
+    useGlobalState('addFoodFormFetched');
+  const [addFoodFormError, setAddFoodFormError] =
+    useGlobalState('addFoodFormError');
+  const [addFoodFormSuccess, setAddFoodFormSuccess] =
+    useGlobalState('addFoodFormSuccess');
 
   const fetchFoods = async () => {
     const req = await fetch('/api/food/all');
     if (!req.ok) {
       const { status, statusText } = req;
-      return setError(
+      return setAddFoodFormError(
         `${status} error: ${statusText}. Please try again later.`,
       );
     }
     const resp = await req.json();
     const { success, data } = resp;
     if (success) {
-      setFoods(data);
-      setFetched(true);
+      setAddFoodFormFoods(data);
+      setAddFoodFormFetched(true);
     } else {
-      setError(`Error: ${data}. Please try again later.`);
-      setFetched(false);
+      setAddFoodFormError(`Error: ${data}. Please try again later.`);
+      setAddFoodFormFetched(false);
     }
   };
 
   useEffect(() => {
-    if (!fetched) {
+    if (!addFoodFormFetched) {
       fetchFoods();
     }
   });
 
   useEffect(() => {
-    if (success) {
-      setTimeout(() => setSuccess(''), 3000);
+    if (addFoodFormSuccess) {
+      setTimeout(() => setAddFoodFormSuccess(''), 3000);
     }
-    if (error) {
-      setTimeout(() => setError(''), 5000);
+    if (addFoodFormError) {
+      setTimeout(() => setAddFoodFormError(''), 5000);
     }
   });
 
@@ -53,9 +56,9 @@ export default function FoodList() {
     <article className={styles.foodList}>
       <h2>Submitted Dishes</h2>
       <FoodListHeaders />
-      {fetched ? <FoodListItems /> : <FoodLoading />}
-      {error && <FoodError />}
-      {success && <FoodSuccess />}
+      {addFoodFormFetched ? <FoodListItems /> : <FoodLoading />}
+      {addFoodFormError && <FoodError />}
+      {addFoodFormSuccess && <FoodSuccess />}
     </article>
   );
 }

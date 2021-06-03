@@ -8,15 +8,14 @@ import styles from './food-list.module.css';
 export default function FoodListItem({ food, index }) {
   const { _id } = food;
 
-  const [showFoodItemOverlay, setShowFoodItemOverlay] = useGlobalState(
-    'showFormItemOverlay',
-  );
+  const [showAddFoodFormItemOverlay, setShowAddFoodFormItemOverlay] =
+    useGlobalState('showAddFoodFormItemOverlay');
 
   const handleShowFoodItemOverlay = () => {
-    if (showFoodItemOverlay === index) {
-      return setShowFoodItemOverlay(-1);
+    if (showAddFoodFormItemOverlay === index) {
+      return setShowAddFoodFormItemOverlay(-1);
     }
-    return setShowFoodItemOverlay(index);
+    return setShowAddFoodFormItemOverlay(index);
   };
 
   // filter out unused fields (explanation fields and mongoDB fields)
@@ -43,7 +42,7 @@ export default function FoodListItem({ food, index }) {
       onClick={handleShowFoodItemOverlay}
       className={styles.foodListItem}>
       {foodFields}
-      {showFoodItemOverlay === index && <FoodItemOverlay _id={_id} />}
+      {showAddFoodFormItemOverlay === index && <FoodItemOverlay _id={_id} />}
     </article>
   );
 }

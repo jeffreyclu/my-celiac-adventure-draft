@@ -40,6 +40,7 @@ const login = async (req, res, next) => {
       }
 
       const { _id } = user;
+
       // create and send a JWT
       const payload = { _id };
       const secret = process.env.APP_SECRET;
@@ -75,7 +76,23 @@ const login = async (req, res, next) => {
         return invalidate();
       }
 
-      res.locals.result = { success: true, _id };
+      const { email, admin, paid } = user;
+
+      res.locals.result = {
+        success: true,
+        data: { _id, username, email, admin, paid },
+      };
+
+      console.log(
+        `Authenticated user: ${JSON.stringify({
+          _id: user._id,
+          username,
+          email: user.email,
+          admin,
+          paid,
+        })}`.green,
+      );
+
       return next();
     });
   } catch (err) {
