@@ -14,6 +14,7 @@ const initialState = {
   userFormData: {},
   userFormSuccess: '',
   userFormError: '',
+  userFormInputDisabled: false,
   userFormDisabled: false,
 
   loggedIn: false,
