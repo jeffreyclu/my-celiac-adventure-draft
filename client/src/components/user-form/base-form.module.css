@@ -1,0 +1,10 @@
+.baseForm {
+  display: flex;
+  flex-flow: column nowrap;
+  min-width: 45vw;
+}
+
+.baseButtons {
+  display: flex;
+  justify-content: space-between;
+}

@@ -1,0 +1,25 @@
+.baseInputRow {
+  position: relative;
+  display: inline-block;
+  height: 3.45rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.baseLabel {
+  font-size: 0.8rem;
+}
+
+.above {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.baseInput {
+  box-sizing: border-box;
+  font-size: 1.25rem;
+  position: absolute;
+  top: 1.2rem;
+  width: 100%;
+}
