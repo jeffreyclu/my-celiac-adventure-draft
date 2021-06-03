@@ -1,4 +1,5 @@
 const User = require('../db/userSchema');
+const Session = require('../db/sessionSchema');
 const jwt = require('jsonwebtoken');
 
 const isAuthorized = async (req, res, next) => {
@@ -14,6 +15,7 @@ const isAuthorized = async (req, res, next) => {
   };
 
   try {
+    // Bail out if no request cookies
     if (!req.cookies) {
       return clearTokenAndNext();
     }
@@ -42,17 +44,56 @@ const isAuthorized = async (req, res, next) => {
       },
     );
 
+    // Bail out if the id doesn't exist
     if (!_id) {
       return clearTokenAndNext();
     }
 
+    // Find the user associated with the id
     const user = await User.findById(_id);
 
+    // Bail out if user not found
     if (!user) {
       return clearTokenAndNext();
     }
 
-    res.locals.result = { success: true, data: user._id };
+    // Try to find an existing session associated with the user id
+    // and update it if the session exists
+    // Or create a new session
+    let session = await Session.findById({ _id });
+
+    if (session) {
+      session = await Session.updateOne(
+        { _id },
+        { token, createdAt: Date.now() },
+      );
+    } else {
+      session = await Session.create({ _id, token });
+    }
+
+    // Bail out if we couldn't create a session
+    if (!session) {
+      return clearTokenAndNext();
+    }
+
+    // Send back the user's id, username, email, and admin or paid status
+    const { username, email, admin, paid } = user;
+
+    res.locals.result = {
+      success: true,
+      data: { _id, username, email, admin, paid },
+    };
+
+    console.log(
+      `Authenticated user: ${JSON.stringify({
+        _id: user._id,
+        username,
+        email: user.email,
+        admin,
+        paid,
+      })}`.green,
+    );
+
     return next();
   } catch (err) {
     return next({ statusCode: 400, message: err.message });
