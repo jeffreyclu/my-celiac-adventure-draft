@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { foodLabels } from '../constants';
+import { addFoodLabels } from '../constants';
 
 import styles from './food-list.module.css';
 
 export default function FoodListHeaders() {
-  const foodListHeaders = Object.values(foodLabels)
+  const foodListHeaders = Object.values(addFoodLabels)
     // filter out the explanation fields, no need to show them
     ?.filter((label) => !/Explanation/.test(label))
     ?.map((header, i) => (

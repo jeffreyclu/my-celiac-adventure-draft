@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useGlobalState } from '../../../state';
-import { baseFormData } from '../constants';
+import { addFoodFormBaseData } from '../constants';
 
 import styles from './food-item-overlay.module.css';
 
@@ -30,7 +30,7 @@ export default function FoodItemOverlay({ _id }) {
       // filter out mongoDB _ keys
       const filtered = Object.entries(data)?.filter(([key]) => !/_/.test(key));
       // map fetched data to form data shape
-      const mapped = Object.assign({}, baseFormData);
+      const mapped = Object.assign({}, addFoodFormBaseData);
       for (let i = 0; i < filtered.length; i += 1) {
         const [key, value] = filtered[i];
         mapped[key] = value;
