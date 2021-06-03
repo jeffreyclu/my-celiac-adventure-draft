@@ -9,6 +9,7 @@ const logout = async (req, res, next) => {
         message: 'User id missing.',
       });
     }
+
     const { _id } = req.body;
 
     if (process.env.NODE_ENV === 'production') {
@@ -22,15 +23,18 @@ const logout = async (req, res, next) => {
       res.cookie('token', null, { httpOnly: true });
       res.clearCookie('token', { path: '/' });
     }
+
     const session = await Session.deleteOne({ _id });
-    console.log(session);
+
     if (!session.deletedCount) {
       return next({
         success: false,
         message: 'Session does not exist.',
       });
     }
+
     res.locals.result = { success: true, loggedOut: true };
+    console.log(`Session ${_id} destroyed.`);
     next();
   } catch (err) {
     next(err);
