@@ -121,7 +121,7 @@ export default function FoodForm() {
   const foodInputs = Object.entries(addFoodFormData)
     // filter out mongoDB _ keys
     ?.filter(([key]) => !/_/.test(key))
-    ?.map(([key, value]) => {
+    ?.map(([key, value], i) => {
       // render inputs dynamically based on form data structure
       let type = 'text';
       // assign different input type based on input value type
@@ -143,7 +143,7 @@ export default function FoodForm() {
       return (
         <FoodInput
           key={key}
-          name={key}
+          name={`Food Input ${i}`}
           label={addFoodLabels[key]}
           type={type}
           value={addFoodFormData[key]}
