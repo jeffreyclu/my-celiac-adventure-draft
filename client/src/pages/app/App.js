@@ -14,6 +14,10 @@ import {
 import styles from './app.module.css';
 import AdminAuthorized from '../../components/auth/auth-admin';
 import AdminLogin from '../login/admin-login';
+import Unauthorized from '../../components/auth/un-auth';
+import Authorized from '../../components/auth/auth';
+import Profile from '../profile/profile';
+import Nav from '../../components/nav/nav';
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useGlobalState('loggedIn');
@@ -43,11 +47,13 @@ export default function App() {
       {loaded && (
         <>
           <Router>
+            {loggedIn && <Nav />}
             <Switch>
               <AdminAuthorized path="/add-food" component={AddFood} />
               <Route path="/admin-login" component={AdminLogin} />
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={Register} />
+              <Unauthorized path="/login" component={Login} />
+              <Unauthorized path="/register" component={Register} />
+              <Authorized path="/profile" component={Profile} />
               <Route path="/" component={Game} />
             </Switch>
           </Router>
