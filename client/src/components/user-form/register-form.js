@@ -5,6 +5,8 @@ import BaseForm from './base-form';
 import { registerFormBaseData } from './constants';
 import { useGlobalState } from '../../state';
 
+import styles from './base-form.module.css';
+
 export default function RegisterForm() {
   const [userFormData, setUserFormData] = useGlobalState('userFormData');
   const [userFormError, setUserFormError] = useGlobalState('userFormError');
@@ -77,8 +79,10 @@ export default function RegisterForm() {
       {loaded && (
         <BaseForm formType="register" handleFormSubmit={handleRegister} />
       )}
-      {userFormSuccess && <span>{userFormSuccess}</span>}
-      {userFormError && <span>{userFormError}</span>}
+      {userFormSuccess && (
+        <span className={styles.success}>{userFormSuccess}</span>
+      )}
+      {userFormError && <span className={styles.error}>{userFormError}</span>}
     </>
   );
 }
