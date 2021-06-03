@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useGlobalState } from '../../state';
 
 export default function Game() {
