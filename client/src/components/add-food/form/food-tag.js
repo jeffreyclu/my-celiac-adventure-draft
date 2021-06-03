@@ -6,24 +6,25 @@ import styles from './food-tag.module.css';
 
 export default function FoodTag({ tag }) {
   const [used, setUsed] = useState(false);
-  const [formData, setFormData] = useGlobalState('formData');
-  const [formEditable] = useGlobalState('formEditable');
+  const [addFoodFormData, setAddFoodFormData] =
+    useGlobalState('addFoodFormData');
+  const [addFoodFormEditable] = useGlobalState('addFoodFormEditable');
 
   // check if current tag is already in the formdata, then set it to used
   // this is only checked when editing existing an existing dish
   useEffect(() => {
-    if (formEditable) {
-      for (let i = 0; i < formData['tags'].length; i += 1) {
-        if (formData['tags'][i] === tag) {
+    if (addFoodFormEditable) {
+      for (let i = 0; i < addFoodFormData['tags'].length; i += 1) {
+        if (addFoodFormData['tags'][i] === tag) {
           setUsed(true);
         }
       }
     }
-  }, [formData, formEditable, tag, setUsed]);
+  }, [addFoodFormData, addFoodFormEditable, tag, setUsed]);
 
   const handleClick = () => {
     // copy the existing tags used in the form
-    let newTags = [...formData['tags']];
+    let newTags = [...addFoodFormData['tags']];
     if (used) {
       // if the current tag is used, remove it from the form's tags
       newTags = newTags.filter((oldTag) => oldTag !== tag);
@@ -35,8 +36,8 @@ export default function FoodTag({ tag }) {
     }
 
     // update the form data with new tags array
-    setFormData({
-      ...formData,
+    setAddFoodFormData({
+      ...addFoodFormData,
       tags: newTags,
     });
   };

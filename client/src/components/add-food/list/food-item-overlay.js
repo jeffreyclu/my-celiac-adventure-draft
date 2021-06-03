@@ -6,19 +6,21 @@ import { baseFormData } from '../constants';
 import styles from './food-item-overlay.module.css';
 
 export default function FoodItemOverlay({ _id }) {
-  const [, setError] = useGlobalState('error');
-  const [, setFormData] = useGlobalState('formData');
-  const [, setFormEditable] = useGlobalState('formEditable');
-  const [, setShowForm] = useGlobalState('showForm');
-  const [, setFetched] = useGlobalState('fetched');
-  const [, setSuccess] = useGlobalState('success');
-  const [, setFood] = useGlobalState('food');
+  const [, setAddFoodFormError] = useGlobalState('addFoodFormError');
+  const [, setAddFoodFormData] = useGlobalState('addFoodFormData');
+  const [, setAddFoodFormEditable] = useGlobalState('addFoodFormEditable');
+  const [, setShowAddFoodForm] = useGlobalState('showAddFoodForm');
+  const [, setAddFoodFormFetched] = useGlobalState('addFoodFormFetched');
+  const [, setAddFoodFormSuccess] = useGlobalState('addFoodFormSuccess');
+  const [, setAddFoodFormSelectedFood] = useGlobalState(
+    'addFoodFormSelectedFood',
+  );
 
   const handleClickEdit = async () => {
     const req = await fetch(`/api/food/one/${_id}`);
     if (!req.ok) {
       const { status, statusText } = req;
-      return setError(
+      return setAddFoodFormError(
         `${status} error: ${statusText}. Please try again later.`,
       );
     }
@@ -33,12 +35,12 @@ export default function FoodItemOverlay({ _id }) {
         const [key, value] = filtered[i];
         mapped[key] = value;
       }
-      setFood(_id);
-      setFormData(mapped);
-      setFormEditable(true);
-      setShowForm(true);
+      setAddFoodFormSelectedFood(_id);
+      setAddFoodFormData(mapped);
+      setAddFoodFormEditable(true);
+      setShowAddFoodForm(true);
     } else {
-      setError(`Error: ${data}. Please try again later.`);
+      setAddFoodFormError(`Error: ${data}. Please try again later.`);
     }
   };
 
@@ -48,17 +50,17 @@ export default function FoodItemOverlay({ _id }) {
     });
     if (!req.ok) {
       const { status, statusText } = req;
-      return setError(
+      return setAddFoodFormError(
         `${status} error: ${statusText}. Please try again later.`,
       );
     }
     const resp = await req.json();
     const { success, data } = resp;
     if (success) {
-      setFetched(false);
-      setSuccess(`Success: ${data.name} was deleted.`);
+      setAddFoodFormFetched(false);
+      setAddFoodFormSuccess(`Success: ${data.name} was deleted.`);
     } else {
-      setError(`Error: ${data}. Please try again later.`);
+      setAddFoodFormError(`Error: ${data}. Please try again later.`);
     }
   };
 

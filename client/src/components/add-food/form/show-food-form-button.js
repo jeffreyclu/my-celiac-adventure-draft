@@ -5,20 +5,23 @@ import { useGlobalState } from '../../../state';
 import styles from './show-food-form-button.module.css';
 
 export default function ShowFoodFormButton() {
-  const [showForm, setShowForm] = useGlobalState('showForm');
-  const [, setFormEditable] = useGlobalState('formEditable');
-  const [, setShowFoodItemOverlay] = useGlobalState('showFormItemOverlay');
+  const [showAddFoodForm, setShowAddFoodForm] =
+    useGlobalState('showAddFoodForm');
+  const [, setAddFoodFormEditable] = useGlobalState('addFoodFormEditable');
+  const [, setShowAddFoodFormItemOverlay] = useGlobalState(
+    'showAddFoodFormItemOverlay',
+  );
 
   const handleShowFormClick = () => {
-    setFormEditable(false);
-    setShowForm(true);
-    setShowFoodItemOverlay(-1);
+    setAddFoodFormEditable(false);
+    setShowAddFoodForm(true);
+    setShowAddFoodFormItemOverlay(-1);
   };
   return (
     <button
       className={styles.showFoodFormButton}
       onClick={handleShowFormClick}
-      disabled={showForm}>
+      disabled={showAddFoodForm}>
       Add a dish
     </button>
   );

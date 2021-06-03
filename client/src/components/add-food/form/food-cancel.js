@@ -3,14 +3,16 @@ import React from 'react';
 import { useGlobalState } from '../../../state';
 
 export default function FoodCancel() {
-  const [, setFood] = useGlobalState('food');
-  const [, setShowForm] = useGlobalState('showForm');
-  const [, setFormDisabled] = useGlobalState('formDisabled');
+  const [, setAddFoodFormSelectedFood] = useGlobalState(
+    'addFoodFormSelectedFood',
+  );
+  const [, setShowAddFoodForm] = useGlobalState('showAddFoodForm');
+  const [, setAddFoodFormDisabled] = useGlobalState('addFoodFormDisabled');
 
   const handleClick = () => {
-    setFood('');
-    setShowForm(false);
-    setFormDisabled(true);
+    setAddFoodFormSelectedFood('');
+    setShowAddFoodForm(false);
+    setAddFoodFormDisabled(true);
   };
 
   return <button onClick={handleClick}>Cancel</button>;
