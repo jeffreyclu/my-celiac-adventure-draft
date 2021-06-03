@@ -52,7 +52,7 @@ const isAuthorized = async (req, res, next) => {
       return clearTokenAndNext();
     }
 
-    res.locals._id = user._id;
+    res.locals.result = { success: true, data: user._id };
     return next();
   } catch (err) {
     return next({ statusCode: 400, message: err.message });
