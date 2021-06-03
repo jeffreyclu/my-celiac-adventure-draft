@@ -4,17 +4,17 @@ import FoodForm from '../../components/add-food/form/food-form';
 import FoodList from '../../components/add-food/list/food-list';
 import ShowFoodFormButton from '../../components/add-food/form/show-food-form-button';
 import { useGlobalState } from '../../state';
-
-import styles from './add-food.module.css';
+import Nav from '../../components/nav/nav';
 
 const AddFood = () => {
-  const [showForm] = useGlobalState('showForm');
+  const [showAddFoodForm] = useGlobalState('showAddFoodForm');
   return (
-    <article className={styles.addFoodContainer}>
+    <>
+      <Nav />
       <FoodList />
-      {!showForm && <ShowFoodFormButton />}
-      {showForm && <FoodForm />}
-    </article>
+      {!showAddFoodForm && <ShowFoodFormButton />}
+      {showAddFoodForm && <FoodForm />}
+    </>
   );
 };
 
