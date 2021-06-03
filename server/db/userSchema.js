@@ -6,8 +6,8 @@ const userSchema = new Schema({
   username: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  paid: { type: Boolean, required: false },
-  admin: { type: Boolean, required: false },
+  paid: { type: Boolean, required: true, default: false },
+  admin: { type: Boolean, required: true, default: false },
 });
 
 userSchema.pre('save', function (next) {
