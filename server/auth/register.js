@@ -110,11 +110,6 @@ const register = async (req, res, next) => {
       })}`.green,
     );
 
-    // done
-    res.locals.result = {
-      success: true,
-      _id,
-    };
     return next();
   } catch (err) {
     return next({ success: false, statusCode: 400, message: err.message });
