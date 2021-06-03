@@ -16,6 +16,7 @@ const initialState = {
   loginFormSuccess: '',
   loginFormDisabled: false,
   loggedIn: false,
+  isAdmin: false,
   currentUser: {},
 };
 
