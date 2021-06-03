@@ -17,7 +17,7 @@ import AdminLogin from '../login/admin-login';
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useGlobalState('loggedIn');
-  const [isAdmin, setIsAdmin] = useGlobalState('isAdmin');
+  const [, setIsAdmin] = useGlobalState('isAdmin');
   const [, setCurrentUser] = useGlobalState('currentUser');
   const [loaded, setLoaded] = useState(false);
 
