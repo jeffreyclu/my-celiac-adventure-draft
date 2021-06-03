@@ -12,6 +12,24 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json({ extended: false }));
 
+// Authentication
+const isAuthorized = require('./auth/auth');
+app.get('/api/auth', isAuthorized, (req, res) => {
+  res.status(200).json({ success: true, user_id: res.locals.user_id });
+});
+const login = require('./auth/login');
+app.post('/api/login', login, (req, res) => {
+  res.status(200).json(res.locals.result);
+});
+const logout = require('./auth/logout');
+app.post('/api/logout', logout, (req, res) => {
+  res.status(200).json(res.locals.result);
+});
+const register = require('./auth/register');
+app.post('/api/register', register, (req, res) => {
+  res.status(201).json(res.locals.result);
+});
+
 // Routes
 const foodRouter = require('./routes/food');
 app.use('/api/food', foodRouter);
@@ -21,18 +39,18 @@ app.use('/api/tag', tagRouter);
 // Serve index.html
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
-  app.get('/*', function (req, res) {
+  app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
   });
 } else {
   app.use(express.static(path.join(__dirname, '../client/public')));
-  app.get('/', function (req, res) {
+  app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/public/index.html'));
   });
 }
 
 // Global error handler
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   if (process.env.NODE_ENV === 'development') {
     console.log(`Error stack -> ${JSON.stringify(err, null, 2)}`.red);
   }
