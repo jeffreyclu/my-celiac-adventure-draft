@@ -13,7 +13,7 @@ tagRouter.get('/one/:id', tagController.getTag, (req, res) =>
 );
 
 tagRouter.post('/one', tagController.postTag, (req, res) =>
-  res.status(200).send(res.locals.result),
+  res.status(201).send(res.locals.result),
 );
 
 tagRouter.put('/one/:id', tagController.putTag, (req, res) =>
