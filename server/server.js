@@ -21,6 +21,10 @@ const isAuthorized = require('./auth/auth');
 app.get('/api/auth', isAuthorized, (req, res) => {
   res.status(200).json(res.locals.result);
 });
+const isAdminAuthorized = require('./auth/auth-admin');
+app.get('/api/auth-admin', isAuthorized, isAdminAuthorized, (req, res) => {
+  res.status(200).json(res.locals.result);
+});
 const login = require('./auth/login');
 app.post('/api/login', login, (req, res) => {
   res.status(200).json(res.locals.result);
