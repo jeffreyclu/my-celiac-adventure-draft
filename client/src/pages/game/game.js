@@ -1,11 +1,13 @@
 import React from 'react';
-
-import styles from './game.module.css';
+import { useGlobalState } from '../../state';
 
 export default function Game() {
+  const [loggedIn] = useGlobalState('loggedIn');
+  const [currentUser] = useGlobalState('currentUser');
   return (
-    <article className={styles.game}>
+    <>
       <h2>My Celiac Adventure</h2>
-    </article>
+      {loggedIn && <h3>Welcome {currentUser.username}</h3>}
+    </>
   );
 }
