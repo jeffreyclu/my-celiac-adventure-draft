@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { useGlobalState } from '../../state';
-
 import styles from './base-input.module.css';
 
 export default function BaseInput({

@@ -5,12 +5,12 @@ import { useGlobalState } from '../../state';
 
 export default function BaseSubmit() {
   const { pathname } = useLocation();
-  const [loginFormDisabled] = useGlobalState('loginFormDisabled');
+  const [userFormDisabled] = useGlobalState('userFormDisabled');
   return (
     <input
       type="submit"
       value={/login/.test(pathname) ? 'Login' : 'Register'}
-      disabled={loginFormDisabled}
+      disabled={userFormDisabled}
     />
   );
 }
