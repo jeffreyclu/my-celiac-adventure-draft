@@ -87,6 +87,29 @@ const register = async (req, res, next) => {
       });
     }
 
+    const { admin, paid } = user;
+
+    res.locals.result = {
+      success: true,
+      data: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        admin,
+        paid,
+      },
+    };
+
+    console.log(
+      `Registered user: ${JSON.stringify({
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        admin,
+        paid,
+      })}`.green,
+    );
+
     // done
     res.locals.result = {
       success: true,
