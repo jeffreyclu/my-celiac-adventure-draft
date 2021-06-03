@@ -56,7 +56,6 @@ export default function BaseForm({ handleFormSubmit }) {
         type={type}
         value={userFormData[key]}
         handleInputChange={handleInputChange}
-        disabled={key === 'tags'}
       />
     );
   });

@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 
 import BaseForm from './base-form';
 import { loginFormBaseData } from './constants';
 import { useGlobalState } from '../../state';
 import { isAdminAuthorized } from '../auth/utils';
+
+import styles from './base-form.module.css';
 
 export default function LoginForm({ adminRequired }) {
   const [userFormData, setUserFormData] = useGlobalState('userFormData');
@@ -12,7 +14,7 @@ export default function LoginForm({ adminRequired }) {
   const [userFormSuccess, setUserFormSuccess] =
     useGlobalState('userFormSuccess');
   const [, setUserFormDisabled] = useGlobalState('userFormDisabled');
-  const [, setLoggedIn] = useGlobalState('loggedIn');
+  const [loggedIn, setLoggedIn] = useGlobalState('loggedIn');
   const [, setCurrentUser] = useGlobalState('currentUser');
   const [, setIsAdmin] = useGlobalState('isAdmin');
   const history = useHistory();
@@ -88,15 +90,23 @@ export default function LoginForm({ adminRequired }) {
     setLoggedIn(true);
     setCurrentUser(resp.data);
     resetFormData();
-    setUserFormSuccess(`Success: logged in.`);
-    return history.push(historyState?.state?.from?.pathname || '/');
+    setUserFormSuccess(`Success: logged in. Automatically redirecting.`);
+    return setTimeout(
+      () => history.push(historyState?.state?.from?.pathname || '/'),
+      1000,
+    );
   };
+
+  if (loggedIn)
+    return <Redirect to={historyState?.state?.from?.pathname || '/'} />;
 
   return (
     <>
       {loaded && <BaseForm formType="login" handleFormSubmit={handleLogin} />}
-      {userFormSuccess && <span>{userFormSuccess}</span>}
-      {userFormError && <span>{userFormError}</span>}
+      {userFormSuccess && (
+        <span className={styles.success}>{userFormSuccess}</span>
+      )}
+      {userFormError && <span className={styles.error}>{userFormError}</span>}
     </>
   );
 }
