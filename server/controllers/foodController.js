@@ -43,6 +43,7 @@ foodController.postFood = async (req, res, next) => {
     res.locals.result = {
       success: true,
       data: food,
+      name: 'foods',
     };
     console.log(`Created food: ${JSON.stringify(food)}`.green);
     next();
@@ -62,6 +63,7 @@ foodController.putFood = async (req, res, next) => {
     res.locals.result = {
       success: true,
       data: food,
+      name: 'foods',
     };
     console.log(`Updated food: ${JSON.stringify(food)}`.green);
     next();
@@ -81,6 +83,7 @@ foodController.deleteFood = async (req, res, next) => {
     res.locals.result = {
       success: true,
       data: food,
+      name: 'foods',
     };
     console.log(`Deleted food: ${JSON.stringify(food)}`.green);
     next();
