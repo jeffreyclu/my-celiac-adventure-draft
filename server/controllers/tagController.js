@@ -43,6 +43,7 @@ tagController.postTag = async (req, res, next) => {
     res.locals.result = {
       success: true,
       data: tag,
+      name: 'tags',
     };
     console.log(`Created tag: ${JSON.stringify(tag)}`.green);
     next();
@@ -62,6 +63,7 @@ tagController.putTag = async (req, res, next) => {
     res.locals.result = {
       success: true,
       data: tag,
+      name: 'tags',
     };
     console.log(`Updated tag: ${JSON.stringify(tag)}`.green);
     next();
@@ -81,6 +83,7 @@ tagController.deleteTag = async (req, res, next) => {
     res.locals.result = {
       success: true,
       data: tag,
+      name: 'tags',
     };
     console.log(`Deleted tag: ${JSON.stringify(tag)}`.green);
     next();
