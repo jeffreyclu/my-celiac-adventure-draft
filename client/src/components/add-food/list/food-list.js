@@ -8,6 +8,7 @@ import FoodLoading from './food-loading';
 import { useGlobalState } from '../../../state';
 
 import styles from './food-list.module.css';
+import { checkCache } from '../../../utils';
 
 export default function FoodList() {
   const [, setAddFoodFormFoods] = useGlobalState('addFoodFormFoods');
@@ -19,6 +20,17 @@ export default function FoodList() {
     useGlobalState('addFoodFormSuccess');
 
   const fetchFoods = async () => {
+    // check if local cache is still valid
+    const isCacheValid = await checkCache('foods');
+    // check the cache
+    if (isCacheValid) {
+      if (localStorage.getItem('foods')) {
+        const cachedFoods = JSON.parse(localStorage.getItem('foods'));
+        setAddFoodFormFoods(cachedFoods.data);
+        return setAddFoodFormFetched(true);
+      }
+    }
+    // otherwise get fresh data
     const req = await fetch('/api/food/all');
     if (!req.ok) {
       const { status, statusText } = req;
@@ -29,6 +41,9 @@ export default function FoodList() {
     const resp = await req.json();
     const { success, data } = resp;
     if (success) {
+      // first cache the data
+      const cache = { data, lastUpdated: Date.now() };
+      localStorage.setItem('foods', JSON.stringify(cache));
       setAddFoodFormFoods(data);
       setAddFoodFormFetched(true);
     } else {

@@ -142,8 +142,8 @@ export default function FoodForm() {
       }
       return (
         <FoodInput
-          key={key}
-          name={`Food Input ${i}`}
+          key={`Food Input ${i}`}
+          name={key}
           label={addFoodLabels[key]}
           type={type}
           value={addFoodFormData[key]}
