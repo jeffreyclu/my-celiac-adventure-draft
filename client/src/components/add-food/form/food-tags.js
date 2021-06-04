@@ -4,6 +4,7 @@ import FoodTag from './food-tag';
 import { useGlobalState } from '../../../state';
 
 import styles from './food-tags.module.css';
+import { checkCache } from '../../../utils';
 
 export default function FoodTags() {
   const [fetchedTags, setFetchedTags] = useState(false);
@@ -11,11 +12,15 @@ export default function FoodTags() {
   const [setAddFoodFormError] = useGlobalState('addFoodFormError');
 
   const fetchTags = async () => {
+    // check if local cache is still valid
+    const isCacheValid = await checkCache('tags');
     // check cache
-    if (localStorage.getItem('tags')) {
-      const cachedTags = JSON.parse(localStorage.getItem('tags'));
-      setFormTags(cachedTags);
-      return setFetchedTags(true);
+    if (isCacheValid) {
+      if (localStorage.getItem('tags')) {
+        const cachedTags = JSON.parse(localStorage.getItem('tags'));
+        setFormTags(cachedTags.data);
+        return setFetchedTags(true);
+      }
     }
 
     // otherwise make fresh data request
@@ -31,7 +36,8 @@ export default function FoodTags() {
 
     if (success) {
       // first cache the data
-      localStorage.setItem('tags', JSON.stringify(data));
+      const cache = { data, lastUpdated: Date.now() };
+      localStorage.setItem('tags', JSON.stringify(cache));
       setFormTags(data);
       setFetchedTags(true);
     } else {
