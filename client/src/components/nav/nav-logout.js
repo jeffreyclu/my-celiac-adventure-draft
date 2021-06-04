@@ -33,6 +33,7 @@ export default function NavLogout() {
       console.log(message);
       return; // TODO handle logout error message
     }
+    localStorage.clear();
     setCurrentUser({});
     setLoggedIn(false);
     return history.push('/');
