@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useGlobalState } from '../../state';
 
 import styles from './base-input.module.css';
@@ -10,8 +9,8 @@ export default function BaseInput({
   type,
   value,
   handleInputChange,
-  disabled,
 }) {
+  const [userFormInputDisabled] = useGlobalState('userFormInputDisabled');
   return (
     <label className={styles.baseInputRow}>
       <span className={`${styles.baseLabel} ${styles.above}`}>{label}</span>
@@ -24,7 +23,7 @@ export default function BaseInput({
           type === 'number' ? 'zero' : 'blank'
         }`}
         onChange={handleInputChange}
-        disabled={disabled}></input>
+        disabled={userFormInputDisabled}></input>
     </label>
   );
 }

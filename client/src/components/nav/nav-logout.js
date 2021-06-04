@@ -21,7 +21,6 @@ export default function NavLogout() {
       },
       body: JSON.stringify(currentUser),
     });
-    console.log('here');
     if (!req.ok) {
       return; // TODO handle logout error message
     }

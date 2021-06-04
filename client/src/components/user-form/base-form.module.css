@@ -8,3 +8,19 @@
   display: flex;
   justify-content: space-between;
 }
+
+.success {
+  margin: 2rem 0;
+  padding: 1rem 0;
+  color: green;
+  border-top: 1px solid green;
+  border-bottom: 1px solid green;
+}
+
+.error {
+  margin: 2rem 0;
+  padding: 1rem 0;
+  color: red;
+  border-top: 1px solid red;
+  border-bottom: 1px solid red;
+}

@@ -1,0 +1,7 @@
+.nav {
+  position: fixed;
+  display: flex;
+  justify-content: space-evenly;
+  bottom: 3rem;
+  width: 30vw;
+}

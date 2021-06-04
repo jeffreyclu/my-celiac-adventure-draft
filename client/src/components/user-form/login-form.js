@@ -1,36 +1,47 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
+
+import BaseForm from './base-form';
+import { loginFormBaseData } from './constants';
 import { useGlobalState } from '../../state';
 import { isAdminAuthorized } from '../auth/utils';
 
-import BaseForm from './base-form';
+import styles from './base-form.module.css';
 
 export default function LoginForm({ adminRequired }) {
-  const [loginFormData, setLoginFormData] = useGlobalState('loginFormData');
-  const [loginFormError, setLoginFormError] = useGlobalState('loginFormError');
-  const [loginFormSuccess, setLoginFormSuccess] =
-    useGlobalState('loginFormSuccess');
-  const [, setLoginFormDisabled] = useGlobalState('loginFormDisabled');
-  const [, setLoggedIn] = useGlobalState('loggedIn');
+  const [userFormData, setUserFormData] = useGlobalState('userFormData');
+  const [userFormError, setUserFormError] = useGlobalState('userFormError');
+  const [userFormSuccess, setUserFormSuccess] =
+    useGlobalState('userFormSuccess');
+  const [, setUserFormDisabled] = useGlobalState('userFormDisabled');
+  const [, setUserFormInputDisabled] = useGlobalState('userFormInputDisabled');
+  const [loggedIn, setLoggedIn] = useGlobalState('loggedIn');
+  const [, setCurrentUser] = useGlobalState('currentUser');
   const [, setIsAdmin] = useGlobalState('isAdmin');
   const history = useHistory();
   const historyState = useLocation();
   const [loaded, setLoaded] = useState(false);
 
   const resetFormData = useCallback(() => {
-    setLoginFormData({
-      username: '',
-      password: '',
-    });
-    setLoginFormDisabled(false);
-  }, [setLoginFormData, setLoginFormDisabled]);
+    setUserFormData(loginFormBaseData);
+    setUserFormDisabled(false);
+    setUserFormInputDisabled(false);
+    setUserFormError('');
+    setUserFormSuccess('');
+  }, [
+    setUserFormData,
+    setUserFormDisabled,
+    setUserFormInputDisabled,
+    setUserFormError,
+    setUserFormSuccess,
+  ]);
 
   useEffect(() => {
-    if (loginFormSuccess) {
-      setTimeout(() => setLoginFormSuccess(''), 3000);
+    if (userFormSuccess) {
+      setTimeout(() => setUserFormSuccess(''), 3000);
     }
-    if (loginFormError) {
-      setTimeout(() => setLoginFormError(''), 5000);
+    if (userFormError) {
+      setTimeout(() => setUserFormError(''), 5000);
     }
   });
 
@@ -43,7 +54,8 @@ export default function LoginForm({ adminRequired }) {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoginFormDisabled(true);
+    setUserFormDisabled(true);
+    setUserFormInputDisabled(true);
     const req = await fetch('/api/login', {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
@@ -52,18 +64,18 @@ export default function LoginForm({ adminRequired }) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(loginFormData),
+      body: JSON.stringify(userFormData),
     });
 
     if (req.status === 401) {
       resetFormData();
-      return setLoginFormError('Username or password is invalid.');
+      return setUserFormError('Username or password is invalid.');
     }
 
     if (!req.ok) {
       const { status, statusText } = req;
       resetFormData();
-      return setLoginFormError(
+      return setUserFormError(
         `${status} error: ${statusText}. Please try again later.`,
       );
     }
@@ -72,7 +84,7 @@ export default function LoginForm({ adminRequired }) {
 
     if (!resp.success) {
       resetFormData();
-      return setLoginFormError(`Error: ${resp.error}. Please try again later.`);
+      return setUserFormError(`Error: ${resp.error}. Please try again later.`);
     }
 
     if (adminRequired) {
@@ -81,43 +93,31 @@ export default function LoginForm({ adminRequired }) {
         setIsAdmin(false);
         setLoggedIn(false);
         resetFormData();
-        return setLoginFormError(`Error: you are not an administrator.`);
+        return setUserFormError(`Error: you are not an administrator.`);
       }
       setIsAdmin(true);
     }
 
     setLoggedIn(true);
+    setCurrentUser(resp.data);
     resetFormData();
-    setLoginFormSuccess(`Success: logged in.`);
-    return history.push(historyState?.state?.from?.pathname || '/');
+    setUserFormSuccess(`Success: logged in. Automatically redirecting.`);
+    return setTimeout(
+      () => history.push(historyState?.state?.from?.pathname || '/'),
+      1000,
+    );
   };
 
-  const handleLoginInputChange = (e) => {
-    let value = e.target.value;
-    // make sure we are using the right value type
-    if (e.target.type === 'checkbox') {
-      value = e.target.checked;
-    } else if (e.target.type === 'number') {
-      value = parseInt(e.target.value);
-    }
-    setLoginFormData({
-      ...loginFormData,
-      [e.target.name]: value,
-    });
-  };
+  if (loggedIn)
+    return <Redirect to={historyState?.state?.from?.pathname || '/'} />;
 
   return (
     <>
-      {loaded && (
-        <BaseForm
-          formType="login"
-          handleFormSubmit={handleLogin}
-          handleInputChange={handleLoginInputChange}
-          formData={loginFormData}
-        />
+      {loaded && <BaseForm formType="login" handleFormSubmit={handleLogin} />}
+      {userFormSuccess && (
+        <span className={styles.success}>{userFormSuccess}</span>
       )}
-      {loginFormSuccess && <span>{loginFormSuccess}</span>}
-      {loginFormError && <span>{loginFormError}</span>}
+      {userFormError && <span className={styles.error}>{userFormError}</span>}
     </>
   );
 }

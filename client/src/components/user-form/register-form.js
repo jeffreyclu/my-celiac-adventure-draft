@@ -1,39 +1,45 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
-import { useGlobalState } from '../../state';
-import { isAdminAuthorized } from '../auth/utils';
 
 import BaseForm from './base-form';
+import { registerFormBaseData } from './constants';
+import { useGlobalState } from '../../state';
 
-export default function RegisterForm({ adminRequired }) {
-  const [registerFormData, setRegisterFormData] =
-    useGlobalState('registerFormData');
-  const [registerFormError, setRegisterFormError] =
-    useGlobalState('registerFormError');
-  const [registerFormSuccess, setRegisterFormSuccess] = useGlobalState(
-    'registerFormSuccess',
-  );
-  const [, setRegisterFormDisabled] = useGlobalState('registerFormDisabled');
+import styles from './base-form.module.css';
+
+export default function RegisterForm() {
+  const [userFormData, setUserFormData] = useGlobalState('userFormData');
+  const [userFormError, setUserFormError] = useGlobalState('userFormError');
+  const [userFormSuccess, setUserFormSuccess] =
+    useGlobalState('userFormSuccess');
+  const [, setUserFormDisabled] = useGlobalState('userFormDisabled');
+  const [, setUserFormInputDisabled] = useGlobalState('userFormInputDisabled');
   const [, setLoggedIn] = useGlobalState('loggedIn');
+  const [, setCurrentUser] = useGlobalState('currentUser');
   const history = useHistory();
   const historyState = useLocation();
   const [loaded, setLoaded] = useState(false);
 
   const resetFormData = useCallback(() => {
-    setRegisterFormData({
-      username: '',
-      email: '',
-      password: '',
-    });
-    setRegisterFormDisabled(false);
-  }, [setRegisterFormData, setRegisterFormDisabled]);
+    setUserFormData(registerFormBaseData);
+    setUserFormDisabled(false);
+    setUserFormInputDisabled(false);
+    setUserFormError('');
+    setUserFormSuccess('');
+  }, [
+    setUserFormData,
+    setUserFormDisabled,
+    setUserFormInputDisabled,
+    setUserFormError,
+    setUserFormSuccess,
+  ]);
 
   useEffect(() => {
-    if (registerFormSuccess) {
-      setTimeout(() => setRegisterFormSuccess(''), 3000);
+    if (userFormSuccess) {
+      setTimeout(() => setUserFormSuccess(''), 3000);
     }
-    if (registerFormError) {
-      setTimeout(() => setRegisterFormError(''), 5000);
+    if (userFormError) {
+      setTimeout(() => setUserFormError(''), 5000);
     }
   });
 
@@ -46,7 +52,8 @@ export default function RegisterForm({ adminRequired }) {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setRegisterFormDisabled(true);
+    setUserFormDisabled(true);
+    setUserFormInputDisabled(true);
     const req = await fetch('/api/register', {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
@@ -55,57 +62,38 @@ export default function RegisterForm({ adminRequired }) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(registerFormData),
+      body: JSON.stringify(userFormData),
     });
 
     if (!req.status === 201) {
-      console.log(req);
       const { status, message } = req;
       resetFormData();
-      return setRegisterFormError(`${status} error: ${message}.`);
+      return setUserFormError(`${status} error: ${message}.`);
     }
 
     const resp = await req.json();
 
     if (!resp.success) {
       resetFormData();
-      return setRegisterFormError(
-        `Error: ${resp.error}. Please try again later.`,
-      );
+      return setUserFormError(`Error: ${resp.error}. Please try again later.`);
     }
 
     setLoggedIn(true);
+    setCurrentUser(resp.data);
     resetFormData();
-    setRegisterFormSuccess(`Success: logged in.`);
+    setUserFormSuccess(`Successfully registered user ${resp.data.username}`);
     return history.push(historyState?.state?.from?.pathname || '/');
-  };
-
-  const handleRegisterInputChange = (e) => {
-    let value = e.target.value;
-    // make sure we are using the right value type
-    if (e.target.type === 'checkbox') {
-      value = e.target.checked;
-    } else if (e.target.type === 'number') {
-      value = parseInt(e.target.value);
-    }
-    setRegisterFormData({
-      ...registerFormData,
-      [e.target.name]: value,
-    });
   };
 
   return (
     <>
       {loaded && (
-        <BaseForm
-          formType="register"
-          handleFormSubmit={handleRegister}
-          handleInputChange={handleRegisterInputChange}
-          formData={registerFormData}
-        />
+        <BaseForm formType="register" handleFormSubmit={handleRegister} />
       )}
-      {registerFormSuccess && <span>{registerFormSuccess}</span>}
-      {registerFormError && <span>{registerFormError}</span>}
+      {userFormSuccess && (
+        <span className={styles.success}>{userFormSuccess}</span>
+      )}
+      {userFormError && <span className={styles.error}>{userFormError}</span>}
     </>
   );
 }

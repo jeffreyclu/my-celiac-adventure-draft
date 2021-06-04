@@ -4,7 +4,7 @@ import FoodSubmit from './food-submit';
 import FoodCancel from './food-cancel';
 import FoodInput from './food-input';
 import FoodTags from './food-tags';
-import { foodLabels, baseFormData } from '../constants';
+import { addFoodLabels, addFoodFormBaseData } from '../constants';
 import { useGlobalState } from '../../../state';
 
 import styles from './food-form.module.css';
@@ -23,7 +23,7 @@ export default function FoodForm() {
   );
 
   const resetFormData = useCallback(() => {
-    setAddFoodFormData(baseFormData);
+    setAddFoodFormData(addFoodFormBaseData);
   }, [setAddFoodFormData]);
 
   // generate a blank form if not editing an existing food
@@ -121,7 +121,7 @@ export default function FoodForm() {
   const foodInputs = Object.entries(addFoodFormData)
     // filter out mongoDB _ keys
     ?.filter(([key]) => !/_/.test(key))
-    ?.map(([key, value]) => {
+    ?.map(([key, value], i) => {
       // render inputs dynamically based on form data structure
       let type = 'text';
       // assign different input type based on input value type
@@ -143,8 +143,8 @@ export default function FoodForm() {
       return (
         <FoodInput
           key={key}
-          name={key}
-          label={foodLabels[key]}
+          name={`Food Input ${i}`}
+          label={addFoodLabels[key]}
           type={type}
           value={addFoodFormData[key]}
           handleInputChange={handleInputChange}

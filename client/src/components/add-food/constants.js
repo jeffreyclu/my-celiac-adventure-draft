@@ -1,4 +1,4 @@
-export const foodLabels = {
+export const addFoodLabels = {
   name: 'Name',
   gluten: 'Gluten',
   glutenExplanation: 'Gluten Explanation',
@@ -15,7 +15,7 @@ export const foodLabels = {
   tags: 'Tags',
 };
 
-export const baseFormData = {
+export const addFoodFormBaseData = {
   name: '',
   gluten: 1,
   glutenExplanation: '',

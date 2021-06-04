@@ -5,6 +5,12 @@ import AddFood from '../add-food/add-food';
 import Game from '../game/game';
 import Login from '../login/login';
 import Register from '../register/register';
+import AdminAuthorized from '../../components/auth/auth-admin';
+import AdminLogin from '../login/admin-login';
+import Unauthorized from '../../components/auth/un-auth';
+import Authorized from '../../components/auth/auth';
+import Profile from '../profile/profile';
+import Nav from '../../components/nav/nav';
 import { useGlobalState } from '../../state';
 import {
   isAuthorized,
@@ -12,12 +18,10 @@ import {
 } from '../../components/auth/utils/index';
 
 import styles from './app.module.css';
-import AdminAuthorized from '../../components/auth/auth-admin';
-import AdminLogin from '../login/admin-login';
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useGlobalState('loggedIn');
-  const [isAdmin, setIsAdmin] = useGlobalState('isAdmin');
+  const [, setIsAdmin] = useGlobalState('isAdmin');
   const [, setCurrentUser] = useGlobalState('currentUser');
   const [loaded, setLoaded] = useState(false);
 
@@ -43,11 +47,13 @@ export default function App() {
       {loaded && (
         <>
           <Router>
+            <Nav />
             <Switch>
               <AdminAuthorized path="/add-food" component={AddFood} />
               <Route path="/admin-login" component={AdminLogin} />
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={Register} />
+              <Unauthorized path="/login" component={Login} />
+              <Unauthorized path="/register" component={Register} />
+              <Authorized path="/profile" component={Profile} />
               <Route path="/" component={Game} />
             </Switch>
           </Router>
