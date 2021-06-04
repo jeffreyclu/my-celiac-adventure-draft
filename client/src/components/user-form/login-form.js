@@ -14,6 +14,7 @@ export default function LoginForm({ adminRequired }) {
   const [userFormSuccess, setUserFormSuccess] =
     useGlobalState('userFormSuccess');
   const [, setUserFormDisabled] = useGlobalState('userFormDisabled');
+  const [, setUserFormInputDisabled] = useGlobalState('userFormInputDisabled');
   const [loggedIn, setLoggedIn] = useGlobalState('loggedIn');
   const [, setCurrentUser] = useGlobalState('currentUser');
   const [, setIsAdmin] = useGlobalState('isAdmin');
@@ -24,7 +25,16 @@ export default function LoginForm({ adminRequired }) {
   const resetFormData = useCallback(() => {
     setUserFormData(loginFormBaseData);
     setUserFormDisabled(false);
-  }, [setUserFormData, setUserFormDisabled]);
+    setUserFormInputDisabled(false);
+    setUserFormError('');
+    setUserFormSuccess('');
+  }, [
+    setUserFormData,
+    setUserFormDisabled,
+    setUserFormInputDisabled,
+    setUserFormError,
+    setUserFormSuccess,
+  ]);
 
   useEffect(() => {
     if (userFormSuccess) {
@@ -45,6 +55,7 @@ export default function LoginForm({ adminRequired }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     setUserFormDisabled(true);
+    setUserFormInputDisabled(true);
     const req = await fetch('/api/login', {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin

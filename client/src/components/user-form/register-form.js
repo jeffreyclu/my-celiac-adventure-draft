@@ -13,6 +13,7 @@ export default function RegisterForm() {
   const [userFormSuccess, setUserFormSuccess] =
     useGlobalState('userFormSuccess');
   const [, setUserFormDisabled] = useGlobalState('userFormDisabled');
+  const [, setUserFormInputDisabled] = useGlobalState('userFormInputDisabled');
   const [, setLoggedIn] = useGlobalState('loggedIn');
   const [, setCurrentUser] = useGlobalState('currentUser');
   const history = useHistory();
@@ -22,7 +23,16 @@ export default function RegisterForm() {
   const resetFormData = useCallback(() => {
     setUserFormData(registerFormBaseData);
     setUserFormDisabled(false);
-  }, [setUserFormData, setUserFormDisabled]);
+    setUserFormInputDisabled(false);
+    setUserFormError('');
+    setUserFormSuccess('');
+  }, [
+    setUserFormData,
+    setUserFormDisabled,
+    setUserFormInputDisabled,
+    setUserFormError,
+    setUserFormSuccess,
+  ]);
 
   useEffect(() => {
     if (userFormSuccess) {
@@ -43,6 +53,7 @@ export default function RegisterForm() {
   const handleRegister = async (e) => {
     e.preventDefault();
     setUserFormDisabled(true);
+    setUserFormInputDisabled(true);
     const req = await fetch('/api/register', {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
