@@ -5,6 +5,12 @@ import AddFood from '../add-food/add-food';
 import Game from '../game/game';
 import Login from '../login/login';
 import Register from '../register/register';
+import AdminAuthorized from '../../components/auth/auth-admin';
+import AdminLogin from '../login/admin-login';
+import Unauthorized from '../../components/auth/un-auth';
+import Authorized from '../../components/auth/auth';
+import Profile from '../profile/profile';
+import Nav from '../../components/nav/nav';
 import { useGlobalState } from '../../state';
 import {
   isAuthorized,
@@ -12,12 +18,6 @@ import {
 } from '../../components/auth/utils/index';
 
 import styles from './app.module.css';
-import AdminAuthorized from '../../components/auth/auth-admin';
-import AdminLogin from '../login/admin-login';
-import Unauthorized from '../../components/auth/un-auth';
-import Authorized from '../../components/auth/auth';
-import Profile from '../profile/profile';
-import Nav from '../../components/nav/nav';
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useGlobalState('loggedIn');
@@ -47,7 +47,7 @@ export default function App() {
       {loaded && (
         <>
           <Router>
-            {loggedIn && <Nav />}
+            <Nav />
             <Switch>
               <AdminAuthorized path="/add-food" component={AddFood} />
               <Route path="/admin-login" component={AdminLogin} />
