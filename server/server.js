@@ -43,6 +43,8 @@ const foodRouter = require('./routes/food');
 app.use('/api/food', foodRouter);
 const tagRouter = require('./routes/tag');
 app.use('/api/tag', tagRouter);
+const cacheRouter = require('./routes/cache');
+app.use('/api/cache', cacheRouter);
 
 // Serve index.html
 if (process.env.NODE_ENV === 'production') {
