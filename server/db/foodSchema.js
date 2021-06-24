@@ -19,7 +19,6 @@ module.exports = mongoose.model(
     lactoseExplanation: { type: String, required: false },
     price: { type: Number, required: true, default: 1 },
     baseHunger: { type: Number, required: true, default: 1 },
-    baseHealth: { type: Number, required: true, default: 1 },
     breakfast: { type: Boolean, require: true, default: false },
     lunch: { type: Boolean, require: true, default: false },
     dinner: { type: Boolean, require: true, default: false },
